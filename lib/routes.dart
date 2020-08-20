@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:notepad/models/note.dart';
 import 'package:notepad/tabs/current_folder_tab.dart';
+import 'package:notepad/widgets/note_editor.dart';
+import 'package:notepad/widgets/note_list.dart';
 
 class Routes {
   static const ROUTE_FOLDER_TAB = "current_folder_tab";
@@ -11,12 +14,15 @@ class Routes {
         return MaterialPageRoute(builder: (context) {
           return CurrentFolderPage();
         });
-      /*case ROUTE_NOTE_EDITOR:
+      case ROUTE_NOTE_EDITOR:
         return MaterialPageRoute(builder: (context) {
-          return 
-        }
-
-        );*/
+          final Note thisNote = settings.arguments;
+//          final NoteList thisNoteList = settings.arguments;
+          return Note_editor(
+            note: thisNote,
+//            noteList: thisNoteList,
+          );
+        });
 
       default:
         throw Exception("Unable to go there");

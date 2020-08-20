@@ -21,3 +21,8 @@ class CurrentFolderTabBody extends StatelessWidget {
     );
   }
 }
+
+
+///failai su underscorais is mazuju
+///klase is didziosios su CamelCase
+///property is mazosios us didziosiomis toliau

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:notepad/main.dart';
 import 'package:notepad/models/note.dart';
+import 'package:notepad/routes.dart';
+import 'package:notepad/main.dart';
+import 'package:notepad/widgets/note_editor.dart';
 
 class NoteList extends StatefulWidget {
   @override
@@ -7,23 +11,46 @@ class NoteList extends StatefulWidget {
 }
 
 class _NoteListState extends State<NoteList> {
-  static final List<Note> notes = [
-    Note(0, "pirmas1234"),
-    Note(1, "antras"),
-    Note(2, "ilgas ilgas ilgas ilgas ilgas ilgas ilgas ilgas ilgas pavadinimas"),
-  ];
+//  List<Note> notes = [
+//    Note(0, "pirmas1234"),
+//    Note(1, "antras"),
+//    Note(
+//        2, "ilgas ilgas ilgas ilgas ilgas ilgas ilgas ilgas ilgas pavadinimas"),
+//  ];
 
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: notes.length,
-      itemBuilder: (context, index) {
-        final item = notes[index];
+    // Read notes
 
-        return ListTile(
-          title: Text(item.buildTitle(context)),
-          subtitle: Text(item.Text_in_note()),
-        );
+    return FutureBuilder(
+      future: UserInformation().getAllNotes(),
+      builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
+        if (snapshot.hasData &&
+            snapshot.connectionState == ConnectionState.done) {
+          final notes = snapshot.data;
+
+          return ListView.builder(
+            itemCount: notes.length,
+            itemBuilder: (context, index) {
+              final item = notes[index];
+
+              return ListTile(
+                  title: Text(item.buildTitle(context)),
+                  subtitle: Text(item.Text_in_note()),
+                  onTap: () => onNoteCreateTap(item));
+            },
+          );
+        } else if (snapshot.hasError) {
+          return Text(snapshot.error.toString());
+        }
+        return CircularProgressIndicator();
       },
     );
+  }
+
+  Future<void> onNoteCreateTap(Note note) async {
+    await Navigator.pushNamed(context, Routes.ROUTE_NOTE_EDITOR,
+        arguments: note);
+
+    setState(() {});
   }
 }
