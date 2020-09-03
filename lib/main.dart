@@ -38,37 +38,19 @@ class MyApp extends StatelessWidget {
 
 class UserInformation {
   void save(int id, Note note) async {
-    print("ar as save");
     final prefs = await SharedPreferences.getInstance();
     id++;
     prefs.setString(id.toString(), note.Text_in_note());
-
-    print("kai as bandau saugoti");
-    print(note.id);
-    print(note.text);
   }
 
   Future<String> read(int id) async {
-    print("ar as read");
     final prefs = await SharedPreferences.getInstance();
     id++;
     final ans = prefs.getString(id.toString()) ?? '';
     return ans;
   }
 
-  /*void getAllNotes() async
-  {
-    final prefs = await SharedPreferences.getInstance();
-    final int kiekis = prefs.getInt('0') ?? '0';
-    List<Note> ans;
-    for (int i = 1; i <= kiekis; i++) {
-      ans.Add(Note(i - 1, prefs.getString(i.toString()) ?? ''));
-    }
-    //return ans;
-  }*/
-
   createDummyData()  async {
-    print("ar as createDummyData");
     List<Note> notes = [
       Note(0, "pirmas1234"),
       Note(1, "antras"),
@@ -80,8 +62,7 @@ class UserInformation {
       save(note.id, note);
     }
 
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setInt('0', notes.length);
+    //final prefs = await SharedPreferences.getInstance();
 
   }
 
@@ -91,19 +72,11 @@ class UserInformation {
 
     final prefs = await SharedPreferences.getInstance();
 
-    print("ar as getAllNotes");
     final int kiekis = prefs.getInt('0') ?? '3';
-    print("kiekis yra: ");
     print(kiekis);
     List<Note> ans = List<Note>();
     for (int i = 1; i <= kiekis; i++) {
-      print("isidedu toki");
-      print(prefs.getString(i.toString() ?? ''));
-      print(i-1);
-      Note createdNote =  Note(i, prefs.getString(i.toString()) ?? '');
-      print("cia turi buti ne nulis");
-      print(createdNote.id);
-      print(createdNote.text);
+      Note createdNote =  Note(i-1, prefs.getString(i.toString()) ?? '');
       ans.add(createdNote);
     }
     return ans;
