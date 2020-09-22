@@ -17,12 +17,12 @@ class Note_editor extends StatelessWidget {
           },
           maxLines: null,
         ),
-        /*appBar: AppBar(title: Text("uzrasas"), actions: <Widget>[
+        appBar: AppBar(title: Text("uzrasas"), actions: <Widget>[
           FlatButton(
-            onPressed: () => update_user_information(),
+            onPressed: () => update_user_information(note.text),///jis nieko nedaro
             child: Text("Save"),
           )
-        ])*/);
+        ]));
   }
 
   void update_user_information(String tekstas) {
