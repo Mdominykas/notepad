@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:notepad/main.dart';
 import 'package:notepad/models/note.dart';
 import 'package:notepad/routes.dart';
-import 'package:notepad/main.dart';
-import 'package:notepad/widgets/note_editor.dart';
 
 class NoteList extends StatefulWidget {
   @override
@@ -20,7 +18,6 @@ class _NoteListState extends State<NoteList> {
 
   Widget build(BuildContext context) {
     // Read notes
-
     return FutureBuilder(
       future: UserInformation().getAllNotes(),
       builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {

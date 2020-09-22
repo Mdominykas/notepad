@@ -46,5 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   onCreatePressed() {
     Navigator.pushNamed(context, Routes.ROUTE_FOLDER_TAB);
     print("Pressed");
+    print("einu:");
+    print(Routes.ROUTE_FOLDER_TAB);
   }
 }
