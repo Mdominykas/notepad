@@ -13,13 +13,13 @@ class Note_editor extends StatelessWidget {
         body: TextField(
           controller: TextEditingController(text: note.Text_in_note()),///galima sita greitu padaryti
           onChanged: (text){
-            update_user_information(text);
+            note.text = text;
           },
           maxLines: null,
         ),
         appBar: AppBar(title: Text("uzrasas"), actions: <Widget>[
           FlatButton(
-            onPressed: () => update_user_information(note.text),///jis nieko nedaro
+            onPressed: () => update_user_information(note.text),
             child: Text("Save"),
           )
         ]));
