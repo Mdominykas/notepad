@@ -9,12 +9,7 @@ class NoteList extends StatefulWidget {
 }
 
 class _NoteListState extends State<NoteList> {
-//  List<Note> notes = [
-//    Note(0, "pirmas1234"),
-//    Note(1, "antras"),
-//    Note(
-//        2, "ilgas ilgas ilgas ilgas ilgas ilgas ilgas ilgas ilgas pavadinimas"),
-//  ];
+
 
   Widget build(BuildContext context) {
     // Read notes
@@ -32,7 +27,7 @@ class _NoteListState extends State<NoteList> {
 
               return ListTile(
                   title: Text(item.buildTitle(context)),
-                  subtitle: Text(item.Text_in_note()),
+                  subtitle: Text(item.summaryOfText()),
                   onTap: () => onNoteCreateTap(item));
             },
           );

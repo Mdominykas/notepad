@@ -28,8 +28,6 @@ class MyApp extends StatelessWidget {
 
 class UserInformation {
   void save(int id, Note note) async {
-    //print("paduodu toki:");
-    //print(note.Text_in_note());
     final prefs = await SharedPreferences.getInstance();
     id++;
     prefs.setString(id.toString(), note.Text_in_note());
