@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:notepad/models/UserInformation.dart';
 import 'package:notepad/models/note.dart';
-import 'package:notepad/main.dart';
 
 class Note_editor extends StatelessWidget {
   final Note note;

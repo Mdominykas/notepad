@@ -21,7 +21,7 @@ class Note{
     if(text.length<20)
       return text;
     else
-      return text.substring(0, 50)+"...";///ne hardcodint
+      return text.substring(0, 20)+"...";///ne hardcodint
   }
 
   String buildTitle(BuildContext context)

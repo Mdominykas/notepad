@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notepad/main.dart';
+import 'package:notepad/models/UserInformation.dart';
 import 'package:notepad/models/note.dart';
 import 'package:notepad/routes.dart';
 

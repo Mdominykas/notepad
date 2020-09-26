@@ -1,4 +1,4 @@
-import 'package:notepad/main.dart';
+import 'package:notepad/models/UserInformation.dart';
 import 'package:notepad/models/note.dart';
 import 'package:notepad/routes.dart';
 import 'package:notepad/widgets/note_list.dart';
