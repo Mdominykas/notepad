@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserInformation().createDummyData();
+
     ///sita veliau istrinti
     return MaterialApp(
       title: 'Flutter Demo',
@@ -35,11 +36,10 @@ class UserInformation {
     print(ans);
   }
 
-  void saveNumberOfNotes(int num) async{
+  void saveNumberOfNotes(int num) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt('0', num);
   }
-
 
   Future<String> read(int id) async {
     final prefs = await SharedPreferences.getInstance();
@@ -48,7 +48,7 @@ class UserInformation {
     return ans;
   }
 
-  createDummyData()  async {
+  createDummyData() async {
     List<Note> notes = [
       Note(0, "pirmas1234"),
       Note(1, "antras"),
@@ -62,7 +62,23 @@ class UserInformation {
     saveNumberOfNotes(notes.length);
 
     //final prefs = await SharedPreferences.getInstance();
+  }
 
+  Future<int> getEmptyId() async {
+    final prefs = await SharedPreferences.getInstance();
+    int kiekis = prefs.getInt('0');
+    for (int i = 1; i <= kiekis + 1; i++) {
+      String sitas = prefs.getString(i.toString()) ?? '';
+      if(sitas=='')
+        return i;
+    }
+    return kiekis+2;
+  }
+
+  Future<int> getNumberOfNotes() async{
+    final prefs = await SharedPreferences.getInstance();
+    int kiekis = prefs.getInt('0');
+    return kiekis;
   }
 
   Future<List<Note>> getAllNotes() async {
@@ -73,7 +89,7 @@ class UserInformation {
     final int kiekis = prefs.getInt('0') ?? '3';
     List<Note> ans = List<Note>();
     for (int i = 1; i <= kiekis; i++) {
-      Note createdNote =  Note(i-1, prefs.getString(i.toString()) ?? '');
+      Note createdNote = Note(i - 1, prefs.getString(i.toString()) ?? '');
       ans.add(createdNote);
     }
     print(ans.length);
