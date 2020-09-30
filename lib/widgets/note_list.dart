@@ -9,7 +9,14 @@ class NoteList extends StatefulWidget {
 }
 
 class _NoteListState extends State<NoteList> {
+  List<Note> notes;
 
+  void updateNoteList()
+  {
+    setState(() {
+      final notes = UserInformation().getAllNotes();
+    });
+  }
 
   Widget build(BuildContext context) {
     // Read notes
@@ -18,7 +25,7 @@ class _NoteListState extends State<NoteList> {
       builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
         if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {
-          final notes = snapshot.data;
+          notes = snapshot.data;
 
           return ListView.builder(
             itemCount: notes.length,
