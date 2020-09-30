@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    UserInformation().createDummyData();
+    //UserInformation().createDummyData();
 
     ///sita veliau istrinti
     return MaterialApp(

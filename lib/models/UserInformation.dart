@@ -1,35 +1,51 @@
 import 'package:notepad/models/note.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class UserInformation {
   void save(int id, Note note) async {
+    print("savinu");
     final prefs = await SharedPreferences.getInstance();
-    id++;
     prefs.setString(id.toString(), note.textInNote());
     final ans = prefs.getString(id.toString());
     print(ans);
   }
 
-  void saveNumberOfNotes(int num) async {
+  clearNote(int id) async {
+    print("clearinuNotes");
     final prefs = await SharedPreferences.getInstance();
-    prefs.setInt('0', num);
+    prefs.setString(id.toString(), "");
+  }
+
+  void saveNumberOfNotes(int num) async {
+    print("savinuNumberOfNotes");
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt("numberOfNotes", num);
+    final maxIdOfNotes = await getMaxIdOfNotes();
+    if (num > maxIdOfNotes) {
+      setMaxIdOfNotes(num);
+    }
   }
 
   Future<String> read(int id) async {
+    print("readinu");
     final prefs = await SharedPreferences.getInstance();
-    id++;
     final ans = prefs.getString(id.toString()) ?? '';
     return ans;
   }
 
-  createDummyData() async {
+
+  void createDummyData() async {
+    print("creatinuDummiuData");
     List<Note> notes = [
       Note(0, "pirmas1234"),
       Note(1, "antras"),
       Note(2,
           "ilgas ilgas ilgas ilgas ilgas ilgas ilgas ilgas ilgas pavadinimas"),
     ];
+    int idsFromLastime = await getMaxIdOfNotes();
+    for (int i = 0; i <= idsFromLastime; i++) {
+      clearNote(i);
+    }
 
     for (final note in notes) {
       save(note.id, note);
@@ -39,32 +55,53 @@ class UserInformation {
     //final prefs = await SharedPreferences.getInstance();
   }
 
-  Future<int> getEmptyId() async {///sita funkcija gali duoti keistu bugu
-    final prefs = await SharedPreferences.getInstance();
-    int kiekis = prefs.getInt('0');
-    for (int i = 1; i <= kiekis + 1; i++) {
-      String sitas = prefs.getString(i.toString()) ?? '';
-      if(sitas=='')
-        return i;
-    }
-    return kiekis+2;
+  Future<int> getEmptyId() async {
+    print("getinuTusciaId");
+    int rez = await getMaxIdOfNotes();
+    return rez + 1;
   }
 
-  Future<int> getNumberOfNotes() async{
+  Future<int> getNumberOfNotes() async {
+    print("getinuNumberOfNotes");
     final prefs = await SharedPreferences.getInstance();
-    int kiekis = prefs.getInt('0');
+    int kiekis = prefs.getInt("numberOfNotes") ?? 0;
     return kiekis;
+  }
+
+  void deleteEmptyNotesInEnd() async {
+    final prefs = await SharedPreferences.getInstance();
+    int didziausias = prefs.getInt("maxIdOfNotes") ?? 0;
+    String paskutinisTekstas = prefs.getString(didziausias.toString());
+    while ((didziausias != 0) && (paskutinisTekstas == "")) {
+      didziausias--;
+      paskutinisTekstas = prefs.getString(didziausias.toString());
+    }
+    setMaxIdOfNotes(didziausias);
+  }
+
+  Future<int> getMaxIdOfNotes() async {
+    print("getinuMaxIDOfNotes");
+    final prefs = await SharedPreferences.getInstance();
+    int maxIdOfNotes = prefs.getInt("maxIdOfNotes") ?? 0;
+    print("pagetinauMaxIdOfNotes");
+    return maxIdOfNotes;
+  }
+
+  void setMaxIdOfNotes(int maxIdOfNotes) async {
+    print("setinuMaxID");
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setInt("maxIdOfNotes", maxIdOfNotes);
   }
 
   Future<List<Note>> getAllNotes() async {
     //createDummyData();
-
+    print("getinuAllNotes");
     final prefs = await SharedPreferences.getInstance();
 
-    final int kiekis = prefs.getInt('0') ?? '3';
+    int kiekis = await getNumberOfNotes();
     List<Note> ans = List<Note>();
-    for (int i = 1; i <= kiekis; i++) {
-      Note createdNote = Note(i - 1, prefs.getString(i.toString()) ?? '');
+    for (int i = 0; i < kiekis; i++) {
+      Note createdNote = Note(i, prefs.getString(i.toString()) ?? '');
       ans.add(createdNote);
     }
     print(ans.length);
