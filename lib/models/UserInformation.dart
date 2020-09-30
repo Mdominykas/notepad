@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:notepad/models/note.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,7 +6,7 @@ class UserInformation {
   void save(int id, Note note) async {
     final prefs = await SharedPreferences.getInstance();
     id++;
-    prefs.setString(id.toString(), note.Text_in_note());
+    prefs.setString(id.toString(), note.textInNote());
     final ans = prefs.getString(id.toString());
     print(ans);
   }

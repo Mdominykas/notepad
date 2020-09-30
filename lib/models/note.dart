@@ -11,7 +11,7 @@ class Note{
     this.text = text;
   }
 
-  String Text_in_note()
+  String textInNote()
   {
     return text;
   }

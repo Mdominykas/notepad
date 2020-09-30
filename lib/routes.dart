@@ -18,7 +18,7 @@ class Routes {
         return MaterialPageRoute(builder: (context) {
           final Note thisNote = settings.arguments;
 //          final NoteList thisNoteList = settings.arguments;
-          return Note_editor(
+          return NoteEditor(
             note: thisNote,
 //            noteList: thisNoteList,
           );

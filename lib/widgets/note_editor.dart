@@ -3,16 +3,16 @@ import 'package:notepad/models/UserInformation.dart';
 import 'package:notepad/models/note.dart';
 import 'package:notepad/routes.dart';
 
-class Note_editor extends StatelessWidget {
+class NoteEditor extends StatelessWidget {
   final Note note;
 
-  const Note_editor({Key key, this.note}) : super(key: key);
+  const NoteEditor({Key key, this.note}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: TextField(
-          controller: TextEditingController(text: note.Text_in_note()),///galima sita greitu padaryti
+          controller: TextEditingController(text: note.textInNote()),///galima sita greitu padaryti
           onChanged: (text){
             note.text = text;
           },
@@ -20,13 +20,13 @@ class Note_editor extends StatelessWidget {
         ),
         appBar: AppBar(title: Text("uzrasas"), actions: <Widget>[
           FlatButton(
-            onPressed: () => update_user_information(note.text, context),
+            onPressed: () => updateUserInformation(note.text, context),
             child: Text("Save"),
           )
         ]));
   }
 
-  void update_user_information(String tekstas, BuildContext context) {
+  void updateUserInformation(String tekstas, BuildContext context) {
     print("bandau issaugoti");
     note.text = tekstas;
     UserInformation().save(note.id, note);

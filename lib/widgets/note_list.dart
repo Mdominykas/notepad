@@ -11,12 +11,6 @@ class NoteList extends StatefulWidget {
 class _NoteListState extends State<NoteList> {
   List<Note> notes;
 
-  void updateNoteList()
-  {
-    setState(() {
-      final notes = UserInformation().getAllNotes();
-    });
-  }
 
   Widget build(BuildContext context) {
     // Read notes
