@@ -15,7 +15,7 @@ class _NoteListState extends State<NoteList> {
   Widget build(BuildContext context) {
     // Read notes
     return FutureBuilder(
-      future: UserInformation().getAllNotes(),
+      future: UserInformation.instance.getAllNotes(),
       builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
         if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {

@@ -1,14 +1,39 @@
 import 'package:flutter/material.dart';
 
+final String tableNotes = 'notes';
+final String columnText = 'text';
+final String columnId = '_id';
+
+
 class Note{
   int id = 3;
 
   String text = "";
 
+  //Note();
+
   Note(int id, String text)
   {
     this.id = id;
     this.text = text;
+  }
+
+  Note.fromMap(Map<String, dynamic> map)
+  {
+    id = map[columnId];
+    text = map[columnText];
+  }
+
+
+  Map<String, dynamic> toMap()
+  {
+    var map = <String, dynamic>{
+      columnText: text
+    };
+    if(id!=null) {
+      map[columnId] = id;
+    }
+    return map;
   }
 
   String textInNote()

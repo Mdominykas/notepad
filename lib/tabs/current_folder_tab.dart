@@ -33,13 +33,10 @@ class CurrentFolderPage extends StatelessWidget {
   }
 
   void createNewNote(BuildContext context) async {
-    int emptyId = await UserInformation().getEmptyId();
-    Note note = Note(emptyId, "ha sukuriau nauja");
-    UserInformation().save(emptyId, note);
+    int numberOfNotes = UserInformation.instance.getNumberOfNotes();
+    Note note = Note(numberOfNotes+1, " g");
+    UserInformation.instance.insert(note);
     Navigator.pushNamed(context, Routes.ROUTE_NOTE_EDITOR, arguments: note);
-    int numberOfNotes = await UserInformation().getNumberOfNotes();
-    numberOfNotes++;
-    UserInformation().saveNumberOfNotes(numberOfNotes);
   }
 }
 

@@ -29,7 +29,10 @@ class NoteEditor extends StatelessWidget {
   void updateUserInformation(String tekstas, BuildContext context) {
     print("bandau issaugoti");
     note.text = tekstas;
-    UserInformation().save(note.id, note);
+    Note noteToSave;
+    noteToSave.text = tekstas;
+    noteToSave.id =  UserInformation.instance.getNumberOfNotes();
+    UserInformation.instance.insert(noteToSave);
     Navigator.pushNamed(context, Routes.ROUTE_FOLDER_TAB);
   }
 }

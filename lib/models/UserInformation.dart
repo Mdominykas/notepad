@@ -1,110 +1,81 @@
+import 'package:flutter/cupertino.dart';
 import 'package:notepad/models/note.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:math';
 
+///https://pusher.com/tutorials/local-data-flutter
+///ant use the database sustojau
 class UserInformation {
-  void save(int id, Note note) async {
-    print("savinu");
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(id.toString(), note.textInNote());
-    final ans = prefs.getString(id.toString());
-    print(ans);
+
+  int numberOfNotes = 0;
+
+  static final _databaseName = "MyDatabase.db";
+  ///increment after upgrade
+  static final _databaseVersion = 1;
+
+  UserInformation._privateConstructor();
+  static final UserInformation instance = UserInformation._privateConstructor();
+
+  static Database _database;
+  Future<Database> get database async{
+    if(_database != null) return _database;
+    _database = await  _initDatabase();
+    return _database;
   }
 
-  clearNote(int id) async {
-    print("clearinuNotes");
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(id.toString(), "");
+  _initDatabase() async{
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    String path = join(documentsDirectory.path, _databaseName);
+
+    return await openDatabase(path, version: _databaseVersion, onCreate: _onCreate);
   }
 
-  void saveNumberOfNotes(int num) async {
-    print("savinuNumberOfNotes");
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setInt("numberOfNotes", num);
-    final maxIdOfNotes = await getMaxIdOfNotes();
-    if (num > maxIdOfNotes) {
-      setMaxIdOfNotes(num);
-    }
+  Future _onCreate(Database db, int version) async{
+    await db.execute('''
+    CREATE TABLE $tableNotes(
+      $columnId INTEGER PRIMARY KEY,
+      $columnText TEXT NOT NULL
+    )
+    ''');
   }
 
-  Future<String> read(int id) async {
-    print("readinu");
-    final prefs = await SharedPreferences.getInstance();
-    final ans = prefs.getString(id.toString()) ?? '';
-    return ans;
+  Future<int> insert(Note note) async{
+    Database db = await database;
+    int id = await db.insert(tableNotes, note.toMap());
+    numberOfNotes = max(numberOfNotes, id);
+    return id;
   }
 
+  Future<Note> queryNote(int id) async{
+    Database db = await database;
+    List<Map> maps = await db.query(tableNotes,
+      columns: [columnId, columnText],
+      where: '$columnId = ?',
+      whereArgs: [id]);
+    if(maps.length>0)
+      return Note.fromMap(maps.first);
+    return null;
+  }
 
   void createDummyData() async {
-    print("creatinuDummiuData");
-    List<Note> notes = [
-      Note(0, "pirmas1234"),
-      Note(1, "antras"),
-      Note(2,
-          "ilgas ilgas ilgas ilgas ilgas ilgas ilgas ilgas ilgas pavadinimas"),
-    ];
-    int idsFromLastime = await getMaxIdOfNotes();
-    for (int i = 0; i <= idsFromLastime; i++) {
-      clearNote(i);
-    }
-
-    for (final note in notes) {
-      save(note.id, note);
-    }
-    saveNumberOfNotes(notes.length);
-
-    //final prefs = await SharedPreferences.getInstance();
+    return;
   }
 
-  Future<int> getEmptyId() async {
-    print("getinuTusciaId");
-    int rez = await getMaxIdOfNotes();
-    return rez + 1;
-  }
-
-  Future<int> getNumberOfNotes() async {
-    print("getinuNumberOfNotes");
-    final prefs = await SharedPreferences.getInstance();
-    int kiekis = prefs.getInt("numberOfNotes") ?? 0;
-    return kiekis;
-  }
-
-  void deleteEmptyNotesInEnd() async {
-    final prefs = await SharedPreferences.getInstance();
-    int didziausias = prefs.getInt("maxIdOfNotes") ?? 0;
-    String paskutinisTekstas = prefs.getString(didziausias.toString());
-    while ((didziausias != 0) && (paskutinisTekstas == "")) {
-      didziausias--;
-      paskutinisTekstas = prefs.getString(didziausias.toString());
-    }
-    setMaxIdOfNotes(didziausias);
-  }
-
-  Future<int> getMaxIdOfNotes() async {
-    print("getinuMaxIDOfNotes");
-    final prefs = await SharedPreferences.getInstance();
-    int maxIdOfNotes = prefs.getInt("maxIdOfNotes") ?? 0;
-    print("pagetinauMaxIdOfNotes");
-    return maxIdOfNotes;
-  }
-
-  void setMaxIdOfNotes(int maxIdOfNotes) async {
-    print("setinuMaxID");
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setInt("maxIdOfNotes", maxIdOfNotes);
+  int getNumberOfNotes() {
+    return numberOfNotes;
   }
 
   Future<List<Note>> getAllNotes() async {
-    //createDummyData();
-    print("getinuAllNotes");
-    final prefs = await SharedPreferences.getInstance();
-
-    int kiekis = await getNumberOfNotes();
+    int kiek = getNumberOfNotes();
     List<Note> ans = List<Note>();
-    for (int i = 0; i < kiekis; i++) {
-      Note createdNote = Note(i, prefs.getString(i.toString()) ?? '');
-      ans.add(createdNote);
-    }
-    print(ans.length);
+    for(int i=0; i<kiek; i++)
+      {
+        Note a = await queryNote(i);
+        ans.add(a);
+      }
     return ans;
   }
 }
